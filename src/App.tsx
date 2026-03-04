@@ -16,3 +16,7 @@ function App() {
 }
 
 export default App;
+/*
+Inicializar con npm run dev
+
+*/

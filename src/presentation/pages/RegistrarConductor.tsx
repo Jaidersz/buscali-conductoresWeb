@@ -2,13 +2,26 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
 import type { Conductor } from "../../domain/entities/Conductor";
+import { useLocation } from "react-router-dom";
 
 export default function RegistrarConductor() {
+
+  const location = useLocation();
+  const conductorToEdit = location.state as Conductor | undefined;
 
   const navigate = useNavigate();
   const repository = new ConductorMockRepository();
 
   const [form, setForm] = useState({
+  id: conductorToEdit?.id ?? 0,
+  nombre: conductorToEdit?.nombre ?? "",
+  cedula: conductorToEdit?.cedula ?? 0,
+  celular: conductorToEdit?.celular ?? 0,
+  correo: conductorToEdit?.correo ?? "",
+  licencia: conductorToEdit?.licencia ?? ""
+  });
+
+ /* const [form, setForm] = useState({
     id: 0,
     nombre: "",
     cedula: 0,
@@ -16,7 +29,7 @@ export default function RegistrarConductor() {
     correo: "",
     licencia: ""
   });
-
+*/
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -47,39 +60,55 @@ export default function RegistrarConductor() {
     const conductor: Conductor = {
       id: Number(form.id),
       nombre: form.nombre,
-      cedula: form.cedula,
-      celular: form.celular,
+      cedula: Number(form.cedula),
+      celular:Number (form.celular),
       correo: form.correo,
       licencia: form.licencia, 
       activo: false 
     };
+      try {
 
-    await repository.save(conductor);
+    if (conductorToEdit) {
+      await repository.update(conductor);
+      alert("Conductor actualizado correctamente");
+    } else {
+      await repository.save(conductor);
+      alert("Conductor registrado correctamente");
+    }
 
-    alert("Conductor registrado correctamente");
     navigate("/conductores");
+
+  } catch (error: unknown) {
+     if (error instanceof Error) {
+     alert(error.message);
+     }
+   }
   };
+  
+
+
+ 
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Registrar Conductor</h1>
+      <h1>{conductorToEdit ? "Editar Conductor" : "Registrar Conductor"}</h1>
 
-      <input type= "number" name="id" placeholder="ID" onChange={handleChange} />
+      <input type= "number" name="id" placeholder="ID" onChange={handleChange} disabled={!!conductorToEdit} />
       <br /><br />
 
-      <input name="nombre" placeholder="Nombre" onChange={handleChange} />
+      <input name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleChange} />
       <br /><br />
 
-      <input name="cedula" placeholder="Cédula" onChange={handleChange} />
+      <input name="cedula" placeholder="Cédula" value={form.cedula} onChange={handleChange} />
       <br /><br />
 
-      <input name="celular" placeholder="Celular" onChange={handleChange} />
+      <input name="celular" placeholder="Celular" value={form.celular} onChange={handleChange} />
       <br /><br />
 
-      <input name="correo" placeholder="Correo" onChange={handleChange} />
+      <input name="correo" placeholder="Correo" value={form.correo} onChange={handleChange} />
       <br /><br />
 
-      <input name="licencia" placeholder="Licencia" onChange={handleChange} />
+      <input name="licencia" placeholder="Licencia" value={form.licencia} onChange={handleChange} />
       <br /><br />
 
       <button onClick={handleSubmit}>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
 import type { Conductor } from "../../domain/entities/Conductor";
@@ -6,7 +6,8 @@ import type { Conductor } from "../../domain/entities/Conductor";
 export default function GestionConductores() {
 
   const navigate = useNavigate();
-  const repository = new ConductorMockRepository();
+  //const repository = new ConductorMockRepository();
+  const repository = useMemo(() => new ConductorMockRepository(), []);
 
   const [conductores, setConductores] = useState<Conductor[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -19,7 +20,7 @@ export default function GestionConductores() {
     };
 
     load();
-  }, []);
+  }, [repository]);
 
   const handleDelete = async () => {
     if (selectedId === null) {
@@ -31,6 +32,16 @@ export default function GestionConductores() {
 
     const updated = await repository.getAll();
     setConductores(updated);
+  };
+
+  const handleEdit =  () => {
+    if (selectedId === null) {
+      alert("Seleccione un conductor");
+      return;
+    }
+    const selectedConductor = conductores.find(c => c.id === selectedId);
+    if (!selectedConductor) return;
+    navigate("/conductores/registrar", { state: selectedConductor });
   };
 
   return (
@@ -46,6 +57,12 @@ export default function GestionConductores() {
         style={{ marginLeft: "10px" }}
       >
         Eliminar Conductor
+      </button>
+      <button
+        onClick={handleEdit}
+        style={{ marginLeft: "10px" }}
+      >
+        Editar Conductor
       </button>
 
       <hr />
