@@ -4,12 +4,16 @@ const HomeAdmin = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <h1>Panel de Administración</h1>
-
-      <button onClick={() => navigate("/conductores")}>
+    
+    <div className="home-hero">
+      <div className="hero-overlay">
+        <h1>Panel de Administración</h1>
+        
+        <p>Bienvenido al panel de administración de BusCali</p>
+      <button className="btn-primary>" onClick={() => navigate("/conductores")}>
         Gestionar Conductores
       </button>
+    </div>
     </div>
   );
 };

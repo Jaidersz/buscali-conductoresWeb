@@ -90,24 +90,41 @@ export default function RegistrarConductor() {
  
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>{conductorToEdit ? "Editar Conductor" : "Registrar Conductor"}</h1>
 
+  <div className="register-page">
+  <div className="register-container">
+
+    <div className="register-left">
+      <img src="/Torre-de-Cali.jpg" alt="Driver" />
+    </div>
+
+
+    <div className="register-right">
+      
+
+      <button onClick={() => navigate("/")} style={{ marginLeft: "2px" }}>
+        ← Volver al Inicio
+      </button>
+      <div style={{ padding: "15px" }}>
+      <h1>{conductorToEdit ? "Editar Conductor" : "Registro Conductor"}</h1>
+       
+       <br /><strong>ID</strong><br />
       <input type= "number" name="id" placeholder="ID" onChange={handleChange} disabled={!!conductorToEdit} />
-      <br /><br />
-
+      
+        <br /><strong>Nombre</strong><br />
       <input name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleChange} />
-      <br /><br />
+      
 
+       <br /><strong>Cédula</strong><br />
       <input name="cedula" placeholder="Cédula" value={form.cedula} onChange={handleChange} />
-      <br /><br />
-
+      
+       <br /><strong>Celular</strong><br />
       <input name="celular" placeholder="Celular" value={form.celular} onChange={handleChange} />
-      <br /><br />
-
+      
+        <br /><strong>Correo</strong><br />
       <input name="correo" placeholder="Correo" value={form.correo} onChange={handleChange} />
-      <br /><br />
-
+      
+        <br /><strong>Licencia</strong><br />
       <input name="licencia" placeholder="Licencia" value={form.licencia} onChange={handleChange} />
       <br /><br />
 
@@ -115,9 +132,12 @@ export default function RegistrarConductor() {
         Registrar
       </button>
 
-      <button onClick={() => navigate("/")} style={{ marginLeft: "10px" }}>
-        ← Volver al Inicio
-      </button>
+     </div>
+
+
+    
+    </div>
+    </div>
     </div>
   );
 }
