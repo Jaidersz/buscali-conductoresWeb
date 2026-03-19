@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
+//import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
 import type { Conductor } from "../../domain/entities/Conductor";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 export default function RegistrarConductor() {
 
@@ -10,15 +11,15 @@ export default function RegistrarConductor() {
   const conductorToEdit = location.state as Conductor | undefined;
 
   const navigate = useNavigate();
-  const repository = new ConductorMockRepository();
+  //const repository = new ConductorMockRepository();
 
   const [form, setForm] = useState({
-  id: conductorToEdit?.id ?? 0,
+  //id: conductorToEdit?.id ?? 0,
   nombre: conductorToEdit?.nombre ?? "",
   cedula: conductorToEdit?.cedula ?? 0,
   celular: conductorToEdit?.celular ?? 0,
   correo: conductorToEdit?.correo ?? "",
-  licencia: conductorToEdit?.licencia ?? ""
+  //licencia: conductorToEdit?.licencia ?? ""
   });
 
  /* const [form, setForm] = useState({
@@ -34,7 +35,7 @@ export default function RegistrarConductor() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const validate = (): string | null => {
+  /*const validate = (): string | null => {
     if (!form.id || !form.licencia || !form.nombre || !form.cedula || !form.celular || !form.correo)
       return "Todos los campos son obligatorios";
 
@@ -50,33 +51,25 @@ export default function RegistrarConductor() {
     return null;
   };
 
+*/
   const handleSubmit = async () => {
-    const error = validate();
-    if (error) {
-      alert(error);
-      return;
-    }
+   
 
-    const conductor: Conductor = {
-      id: Number(form.id),
+    const body = {
+      
       nombre: form.nombre,
-      cedula: Number(form.cedula),
-      celular:Number (form.celular),
+      cedula: form.cedula,
+      celular:form.celular,
       correo: form.correo,
-      licencia: form.licencia, 
-      activo: false 
+      activo: "Activo"
     };
       try {
 
-    if (conductorToEdit) {
-      await repository.update(conductor);
-      alert("Conductor actualizado correctamente");
-    } else {
-      await repository.save(conductor);
-      alert("Conductor registrado correctamente");
-    }
-
-    navigate("/conductores");
+   const register = await axios.post("http://localhost:8080/api/conductores", body);
+   if (register.status === 201) {
+     alert("Conductor registrado correctamente");
+     navigate("/conductores");
+   }
 
   } catch (error: unknown) {
      if (error instanceof Error) {
@@ -108,25 +101,19 @@ export default function RegistrarConductor() {
       <div style={{ padding: "15px" }}>
       <h1>{conductorToEdit ? "Editar Conductor" : "Registro Conductor"}</h1>
        
-       <br /><strong>ID</strong><br />
-      <input type= "number" name="id" placeholder="ID" onChange={handleChange} disabled={!!conductorToEdit} />
-      
+
         <br /><strong>Nombre</strong><br />
       <input name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleChange} />
-      
 
        <br /><strong>Cédula</strong><br />
       <input name="cedula" placeholder="Cédula" value={form.cedula} onChange={handleChange} />
       
-       <br /><strong>Celular</strong><br />
+       <br /><strong>Teléfono</strong><br />
       <input name="celular" placeholder="Celular" value={form.celular} onChange={handleChange} />
       
         <br /><strong>Correo</strong><br />
       <input name="correo" placeholder="Correo" value={form.correo} onChange={handleChange} />
       
-        <br /><strong>Licencia</strong><br />
-      <input name="licencia" placeholder="Licencia" value={form.licencia} onChange={handleChange} />
-      <br /><br />
 
       <button onClick={handleSubmit}>
         Registrar

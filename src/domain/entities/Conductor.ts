@@ -9,12 +9,11 @@
   //) {}
 //}
 
+
 export interface Conductor {
-  id: number;
   nombre: string;
-  licencia: string;
-  cedula: number;
-  celular: number;
+  cedula: string;
+  celular: string;
   correo: string;
   activo: boolean;
 
