@@ -1,130 +1,156 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 //import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
-import type { Conductor } from "../../domain/entities/Conductor";
-import { useLocation } from "react-router-dom";
-import axios from "axios";
+import type { Conductor } from '../../domain/entities/Conductor';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 export default function RegistrarConductor() {
-
   const location = useLocation();
   const conductorToEdit = location.state as Conductor | undefined;
 
   const navigate = useNavigate();
   //const repository = new ConductorMockRepository();
 
+  // const [form, setForm] = useState({
+  //   cedula: conductorToEdit!.cedula,
+  //   nombre: conductorToEdit!.nombre,
+  //   telefono: conductorToEdit!.telefono,
+  //   correo_electronico: conductorToEdit!.correo_electronico,
+  //   contrasena: conductorToEdit?.contrasena ?? '',
+  //   estado: conductorToEdit?.estado ?? '',
+  // });
+
   const [form, setForm] = useState({
-  //id: conductorToEdit?.id ?? 0,
-  nombre: conductorToEdit?.nombre ?? "",
-  cedula: conductorToEdit?.cedula ?? 0,
-  celular: conductorToEdit?.celular ?? 0,
-  correo: conductorToEdit?.correo ?? "",
-  //licencia: conductorToEdit?.licencia ?? ""
+    cedula: '',
+    nombre: '',
+    telefono: '',
+    correo_electronico: '',
+    contrasena: '',
+    estado: '',
   });
 
- /* const [form, setForm] = useState({
-    id: 0,
-    nombre: "",
-    cedula: 0,
-    celular: 0,
-    correo: "",
-    licencia: ""
-  });
-*/
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  /*const validate = (): string | null => {
-    if (!form.id || !form.licencia || !form.nombre || !form.cedula || !form.celular || !form.correo)
-      return "Todos los campos son obligatorios";
-
-    if (Number(form.id) < 0)
-      return "El ID no puede ser negativo";
-
-    if (!form.correo.includes("@"))
-      return "El correo debe contener un @";
-
-    if (Number(form.celular) > 9999999999 || Number(form.celular) < 1000000000)
-      return "El celular debe tener exactamente 10 dígitos";
-
-    return null;
-  };
-
-*/
   const handleSubmit = async () => {
-   
-
     const body = {
-      
-      nombre: form.nombre,
       cedula: form.cedula,
-      celular:form.celular,
-      correo: form.correo,
-      activo: "Activo"
+      nombre: form.nombre,
+      correo_electronico: form.correo_electronico,
+      telefono: form.telefono,
+      contrasena: form.contrasena,
+      estado: form.estado,
     };
-      try {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL;
 
-   const register = await axios.post("http://localhost:8080/api/conductores", body);
-   if (register.status === 201) {
-     alert("Conductor registrado correctamente");
-     navigate("/conductores");
-   }
-
-  } catch (error: unknown) {
-     if (error instanceof Error) {
-     alert(error.message);
-     }
-   }
+      const register = await axios.post(`${API_URL}/conductores`, body);
+      if (register.data) {
+        alert('Conductor registrado correctamente');
+        navigate('/conductores');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Aquí recibes lo que tu backend mandó
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error en la petición";
+    
+        if (status === 400) {
+          alert(`Error de validación: ${message}`);
+        } else if (status === 409) {
+          alert(`Datos duplicados: ${message}`);
+        } else {
+          alert(message);
+        }
+      } else {
+        alert("Error inesperado");
+      }
+    }
   };
-  
-
-
- 
 
   return (
+    <div className='register-page'>
+      <div className='register-container'>
+        <div className='register-left'>
+          <img src='/Torre-de-Cali.jpg' alt='Driver' />
+        </div>
 
-  <div className="register-page">
-  <div className="register-container">
+        <div className='register-right'>
+          <button onClick={() => navigate('/')} style={{ marginLeft: '2px' }}>
+            ← Volver al Inicio
+          </button>
+          <div style={{ padding: '15px' }}>
+            <h1>
+              {conductorToEdit ? 'Editar Conductor' : 'Registro Conductor'}
+            </h1>
 
-    <div className="register-left">
-      <img src="/Torre-de-Cali.jpg" alt="Driver" />
-    </div>
+            <strong>Cédula</strong>
+            <br />
+            <input
+              name='cedula'
+              placeholder='Cédula'
+              value={form.cedula}
+              onChange={handleChange}
+            />
 
+            <br />
 
-    <div className="register-right">
-      
+            <br />
+            <strong>Nombre</strong>
+            <br />
+            <input
+              name='nombre'
+              placeholder='Nombre'
+              value={form.nombre}
+              onChange={handleChange}
+            />
 
-      <button onClick={() => navigate("/")} style={{ marginLeft: "2px" }}>
-        ← Volver al Inicio
-      </button>
-      <div style={{ padding: "15px" }}>
-      <h1>{conductorToEdit ? "Editar Conductor" : "Registro Conductor"}</h1>
-       
+            <br />
 
-        <br /><strong>Nombre</strong><br />
-      <input name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleChange} />
+            <br />
+            <strong>Correo Electronico</strong>
+            <br />
+            <input
+              name='correo_electronico'
+              placeholder='Correo Electronico'
+              value={form.correo_electronico}
+              onChange={handleChange}
+            />
 
-       <br /><strong>Cédula</strong><br />
-      <input name="cedula" placeholder="Cédula" value={form.cedula} onChange={handleChange} />
-      
-       <br /><strong>Teléfono</strong><br />
-      <input name="celular" placeholder="Celular" value={form.celular} onChange={handleChange} />
-      
-        <br /><strong>Correo</strong><br />
-      <input name="correo" placeholder="Correo" value={form.correo} onChange={handleChange} />
-      
+            <strong>Teléfono</strong>
+            <br />
+            <input
+              name='telefono'
+              placeholder='Telefono'
+              value={form.telefono}
+              onChange={handleChange}
+            />
 
-      <button onClick={handleSubmit}>
-        Registrar
-      </button>
+            <br />
+            <strong>Contraseña</strong>
+            <br />
+            <input
+              name='contrasena'
+              placeholder='Contraseña'
+              value={form.contrasena}
+              onChange={handleChange}
+            />
 
-     </div>
-
-
-    
-    </div>
-    </div>
+            <br />
+            <strong>Estado</strong>
+            <br />
+            <input
+              name='estado'
+              placeholder='Estado'
+              value={form.estado}
+              onChange={handleChange}
+            />
+          </div>
+          <button onClick={handleSubmit}>Registrar</button>
+        </div>
+      </div>
     </div>
   );
 }

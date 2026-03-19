@@ -1,7 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, /*useMemo*/ useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
-import type { Conductor } from "../../domain/entities/Conductor";
+// import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
+import axios from "axios";
+ import type { Conductor } from "../../domain/entities/Conductor";
+
+ const API_URL = import.meta.env.VITE_API_URL;
 
 export default function GestionConductores() {
 
@@ -9,50 +12,54 @@ export default function GestionConductores() {
   //const repository = new ConductorMockRepository();
 
 
-  const repository = useMemo(() => new ConductorMockRepository(), []);
+  // const repository = useMemo(() => new ConductorMockRepository(), []);
   const [conductores, setConductores] = useState<Conductor[]>([]);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  // const [selectedCedula, setSelectedCedula] = useState<number | null>(null);
   const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
     const load = async () => {
-      const data = await repository.getAll();
-      console.log("Conductores cargados:", data);
-      setConductores(data);
+      try {
+        const response = await axios.get(`${API_URL}/conductores`);
+        console.log("Conductores cargados:", response.data);
+        setConductores(response.data); // aquí guardas el array
+      } catch (error) {
+        console.error("Error cargando conductores:", error);
+      }
     };
-
+  
     load();
-  }, [repository]);
+  }, []);
 
-  const handleDelete = async () => {
-    if (selectedId === null) {
-      alert("Seleccione un conductor");
-      return;
-    }
+  // const handleDelete = async () => {
+  //   if (selectedCedula === null) {
+  //     alert("Seleccione un conductor");
+  //     return;
+  //   }
 
-    await repository.delete(selectedId);
+  //   await repository.delete(selectedCedula);
 
-    const updated = await repository.getAll();
-    setConductores(updated);
-  };
+  //   const updated = await repository.getAll();
+  //   setConductores(updated);
+  // };
 
-  const handleEdit =  () => {
-    if (selectedId === null) {
-      alert("Seleccione un conductor");
-      return;
-    }
-    const selectedConductor = conductores.find(c => c.id === selectedId);
-    if (!selectedConductor) return;
-    navigate("/conductores/registrar", { state: selectedConductor });
+  // const handleEdit =  () => {
+  //   if (selectedcedula === null) {
+  //     alert("Seleccione un conductor");
+  //     return;
+  //   }
+  //   const selectedConductor = conductores.find(c => c.cedula === selectedcedula);
+  //   if (!selectedConductor) return;
+  //   navigate("/conductores/registrar", { state: selectedConductor });
 
-  };
+  // };
 
   const conductoresFiltrados = conductores.filter((conductor) =>
-  conductor.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-  String(conductor.celular).includes(busqueda) ||
-  String(conductor.cedula).includes(busqueda) 
-  //String(conductor.id).includes(busqueda) ||
-);
+    conductor.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+    String(conductor.cedula).includes(busqueda) ||
+    String(conductor.telefono).includes(busqueda)
+  );
+  
 
   return (
     <div className="drivers-page">
@@ -80,14 +87,14 @@ export default function GestionConductores() {
        onChange={(e) => setBusqueda(e.target.value)}
        />
       <button
-        onClick={handleDelete}
+        // onClick={handleDelete}
         style={{ marginLeft: "10px" }}
       >
         Eliminar Conductor
       </button>
 
       <button
-        onClick={handleEdit}
+        // onClick={handleEdit}
         style={{ marginLeft: "10px" }}
       >
         Editar Conductor
@@ -97,12 +104,11 @@ export default function GestionConductores() {
   <table>
   <thead>
     <tr>
-      <th>ID</th>
+      <th>Cedula</th>
       <th>Nombre</th>
-      <th>Celular</th>
       <th>Correo</th>
-      <th>Licencia</th>
-      <th>Acciones</th>
+      <th>Telefono</th>
+      <th>Estado</th>
     </tr>
   </thead>
  
@@ -122,16 +128,16 @@ export default function GestionConductores() {
      
      <tr key={index}>
      
-     <td>{conductor.id}</td>
+     <td>{conductor.cedula}</td>
      <td>{conductor.nombre}</td>
-     <td>{conductor.celular}</td> 
-     <td>{conductor.correo}</td>
-     <td>{conductor.licencia}</td>
+     <td>{conductor.correo_electronico}</td> 
+     <td>{conductor.telefono}</td>
+     <td>{conductor.estado}</td>
 
      <td>
-      <button onClick={() => setSelectedId(conductor.id)} style={{ marginRight: "5px" }}>
+      {/* <button onClick={() => setSelectedCedula(conductor.cedula)} style={{ marginRight: "5px" }}>
         Seleccionar
-      </button>
+      </button>*/ }
      </td>
 
      </tr>

@@ -11,10 +11,11 @@
 
 
 export interface Conductor {
-  nombre: string;
   cedula: string;
-  celular: string;
-  correo: string;
-  activo: boolean;
+  nombre: string;
+  correo_electronico: string;
+  telefono: string;
+  contrasena: string;
+  estado: string;
 
 }
