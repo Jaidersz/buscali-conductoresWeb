@@ -37,37 +37,27 @@ export default function RegistrarConductor() {
   };
 
   const handleSubmit = async () => {
-    const body: Partial<Conductor> = {};
+    const body: Partial<Conductor> = conductorToEdit
+    ? {
+        // --- Modo editar: todo opcional ---
+        ...(form.nombre && { nombre: form.nombre }),
+        ...(form.correo_electronico && { correo_electronico: form.correo_electronico }),
+        ...(form.telefono && { telefono: form.telefono }),
+        ...(form.estado && { estado: form.estado })
+      }
+    : {
+        // --- Modo registrar: obligatorios + opcionales ---
+        cedula: form.cedula,
+        nombre: form.nombre,
+        correo_electronico: form.correo_electronico,
+        telefono: form.telefono,
+        ...(form.contrasena && { contrasena: form.contrasena }),
+        ...(form.estado && { estado: form.estado }),
+      };
 
-    if (conductorToEdit) {
-      // Construcción del body para editar: todo es opcional
-      if (form.nombre) {
-        body.nombre = form.nombre;
-      }
-      if (form.correo_electronico) {
-        body.correo_electronico = form.correo_electronico;
-      }
-      if (form.telefono) {
-        body.telefono = form.telefono;
-      }
-      if (form.estado) {
-        body.estado = form.estado;
-      }
-    } else {
-      // Construcción del body: incluye opcionales solo si tienen valor
-        body.cedula= form.cedula;
-        body.nombre= form.nombre;
-        body.correo_electronico= form.correo_electronico;
-        body.telefono= form.telefono;
-      
 
-        if (form.contrasena) body.contrasena = form.contrasena;
-        if (form.estado) body.estado = form.estado;
-    }
-console.log(body)
     try {
       const API_URL = import.meta.env.VITE_API_URL;
-      console.log(conductorToEdit!.cedula);
       if (conductorToEdit) {
         const update = await axios.put(
           `${API_URL}/conductores/${selectCedula}`,
@@ -89,7 +79,8 @@ console.log(body)
       if (axios.isAxiosError(error)) {
         // Aquí recibes lo que tu backend mandó
         const status = error.response?.status;
-        const message = error.response?.data.error || 'Error en la petición';
+        const message = error.response?.data.error.map((err:string) =>`- ${err}`).join('\n') || 'Error en la petición';
+        
 
         // const message = error.response?.data.error
         if (status === 400) {
@@ -102,7 +93,7 @@ console.log(body)
         }
       } else {
         alert('Error inesperado');
-        console.log(body)
+        
       }
     }
   };
