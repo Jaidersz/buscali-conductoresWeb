@@ -36,6 +36,11 @@ export default function GestionConductores() {
       alert("Seleccione un conductor para eliminar");
       return;
     }
+    const seguro = window.confirm("¿Estás seguro de eliminar este conductor?");
+    if (!seguro) {
+      return; // el usuario canceló
+    }
+
     try {
       const API_URL = import.meta.env.VITE_API_URL;
       const response = await axios.delete(`${API_URL}/conductores/${selectedCedula}`)
