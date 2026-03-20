@@ -1,3 +1,8 @@
+/* verde: #00AA00 */
+/* rojo: #DD0000 */
+/* azul: #0000DD */
+/* blanco: #FFFFFF */
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -20,6 +25,7 @@ a {
   color: #ded0d0;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #00ff1a;
 }
@@ -31,26 +37,14 @@ body {
   min-height: 100vh;
 }
 
-.hero-overlay h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-  color:#fefbfb
-}
 
 .drivers-page h1 {
   font-size: 3.2em;
   line-height: 1.1;
-  color:#0b0a31
+  color: #0b0a31
 }
 
-.btn-delete {
-  background: #b7bbe0;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-} 
+
 
 button {
   border-radius: 8px;
@@ -62,22 +56,19 @@ button {
   background-color: #0a1daf;
   cursor: pointer;
   transition: all 0.3s ease;
-  transform: translateY(-5px);
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-  margin-top: 10px;
-  margin-bottom: 2px;
 }
- 
+
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  background-color: #DD0000;
 }
 
-button:focus,
+/* button:focus,
 button:focus-visible {
-  outline: 10px auto -webkit-focus-ring-color;
-}
+  
+} */
 
 /* CONTENEDOR GENERAL CENTRADO */
 .page-container {
@@ -108,45 +99,30 @@ button:focus-visible {
 
 /* INPUTS */
 input {
+  background-color: #FFFFFF;
   width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
   border-radius: 10px;
-  border: 1px solid #2a23b0;
+  border: 5px solid #2a23b0;
   font-size: 14px;
+  color: #000;
 }
 
 input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #0000DD;
 }
 
 /* BOTONES */
-.btn-primary {
-  background: linear-gradient(135deg,#667eea,#764ba2);
-  color: white;
-  padding: 12px 18px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-.btn-primary:hover {
-  background: linear-gradient(135deg,#764ba2,#667eea);
-  border-radius: 20px;
-}
+
+
+
 
 .btn-delete {
-  background: #ff4d4f;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 8px;
-  cursor: pointer;
+  background: #DD0000;
 }
 
 /* TABLA */
-table {
+/* table {
   width: 90%;
   border-collapse: collapse;
   margin-top: 20px;
@@ -155,11 +131,11 @@ table {
 th {
   background: #f5f6fa;
   padding: 5px;
-}
+} */
 
 td {
   padding: 5px;
-  
+
 }
 
 tr:hover {
@@ -188,37 +164,37 @@ tr:hover {
 }
 */
 /* REGISTRAR CONDUCTOR */
-.register-page{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#9197e2,#6c62b6);
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #9197e2, #6c62b6);
 }
 
-.register-container{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  width:900px;
+.register-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 900px;
   height: 600px;
-  background:white;
-  border-radius:15px;
-  overflow:hidden;
-  box-shadow:0 10px 30px rgba(2, 1, 1, 0.862);
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(2, 1, 1, 0.862);
 }
 
-.register-left{
-  background:#ffffff;
-  border-radius:20px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+.register-left {
+  background: #ffffff;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 80%;
-  box-shadow:0 10px 30px rgba(2, 1, 1, 0.862);
+  box-shadow: 0 10px 30px rgba(2, 1, 1, 0.862);
 }
 
-.register-left img{
-  width:100%;
+.register-left img {
+  width: 100%;
   height: 100%;
   border-radius: 8px;
   margin: 2px;
@@ -226,134 +202,157 @@ tr:hover {
   margin-bottom: 10px;
 
 }
-button {
-  padding: 10px 20px;
+
+.register-right {
+  padding: 10px;
 }
-.register-right{
-  padding:10px;
-}
+
 /* TITULO: registrar conductor */
 .register-right h1 {
   margin-top: 0%;
   margin-bottom: 0%;
-  color:#000000
+  color: #000000
 }
+
 /* INPUTS: cuadros donde se ingresa la información */
-.register-right input{
-  width:100%;
-  padding:10px;
-  margin-bottom:0px;
-  border:1px solid #aaa3a3;
-  border-radius:8px;
+.register-right input {
+  
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 0px;
+  border: 1px solid #aaa3a3;
+  border-radius: 8px;
 
 }
 
-.register-right button{
-  width:100%;
-  padding:12px;
-  background:#04922e;
-  border:none;
-  color:white;
-  border-radius:8px;
-  cursor:pointer;
+.register-right button {
+  width: 100%;
+  padding: 12px;
+  background: #00AA00;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 /* HOME ADMIN */
-.home-hero{
-  height:100vh;
-  background-image:url("/La-ermita.jpg");
-  background-size:cover;
-  background-position:center;
-  display:flex;
-  align-items:center;
+.home-hero {
+  height: 100vh;
+  background-image: url("/La-ermita.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
 }
 
-.hero-overlay{
-  margin-left:80px;
-  background:rgba(0,0,0,0.5);
-  padding:40px;
-  border-radius:10px;
-  color:white;
+.hero-overlay {
+  margin-left: 80px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 40px;
+  border-radius: 10px;
+  color: #FFFFFF;
+  text-shadow: 
+  -1px -1px 0 black,
+   1px -1px 0 black,
+  -1px  1px 0 black,
+   1px  1px 0 black;
 }
 
-.hero-overlay h1{
-  font-size:48px;
+.hero-overlay h1 {
+  font-size: 48px;
+  line-height: 1.1;
+  color: #FFFFFF;
 }
 
-.hero-overlay p{
-  margin:20px 0;
+.hero-overlay p {
+  
+  margin: 16px 0;
+  font-size: 20px;
 }
 
-.hero-overlay button{
-  padding:12px 25px;
-  background:#31d62c;
-  border:none;
+.hero-overlay button {
+  /* este boton es primario, entonces hereda muchas cualidades que aqui se redefinen igual de manera innecesaria */
+  padding: 12px 25px;
+  background: #00AA00;
+  
+  /* border:none;
   border-radius:6px;
-  cursor:pointer;
+  cursor:pointer; */
 }
 
 /* GESTION CONDUCTORES */
-.drivers-page{
-  padding:40px;
-  background:#f5f7f9;
-  min-height:100vh;
+.drivers-page {
+  padding: 40px;
+  background: #00AA00;
+  min-height: 100vh;
 }
 
-.drivers-card{
-  background:white;
-  padding:30px;
-  border-radius:12px;
-  box-shadow:0 5px 20px rgba(21, 16, 16, 0.897);
+.drivers-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(21, 16, 16, 0.897);
 }
 
-.drivers-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
+.drivers-header {
+  width: 80%;
+  margin: 0 10%;
+  display: flex;
+  justify-content:space-evenly;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.drivers-header button{
-  background:#1fda47;
-  color:white;
-  border:none;
-  padding:10px 18px;
-  border-radius:6px;
-  cursor:pointer;
+.drivers-header button {
+  background: #00AA00;
+
 }
 
-.search{
-  width:250px;
-  padding:8px;
-  margin-bottom:20px;
-  border:1px solid #ddd;
-  border-radius:6px;
+
+.search {
+  width: 33%;
+  padding: 8px;
+  border: 1px solid #000;
+  
 }
 
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:20px;
+.options {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
 }
 
-th{
-  text-align:left;
-  padding:12px;
-  background:#f4f6f8;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th {
+  text-align: left;
+  padding: 12px;
+  background: #f4f6f8;
   font-weight: bold;
 }
 
 
-tr:hover{
-  background:#a0dce9b6;
-  color:white;
+tr:hover {
+  background: #0000DD;
+  cursor: pointer;
+  color: white;
 }
-th, td {
+
+
+/* hacer q tr se quede cambiadoo el color para q el usuario sepa q selecciono */
+
+th,
+td {
   text-align: center;
-  border: 1px solid #e4e4e4;
+  border: 1px solid #000000;
   padding: 2px;
 }
-p{
+
+p {
   display: block;
   margin-block-start: 30px;
   margin-block-end: 30px;
@@ -364,28 +363,28 @@ p{
 }
 
 /*Fondos Imagenes*/
-.home-bg{
-  min-height:100vh;
-  background-image:url("/La-ermita.jpg");
-  background-size:cover;
-  background-position:center;
+.home-bg {
+  min-height: 100vh;
+  background-image: url("/La-ermita.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
-.conductores-bg{
-  min-height:100vh;
-  background-image:url("/fondo-conductores.jpg");
-  background-size:cover;
-  background-position:center;
+.conductores-bg {
+  min-height: 100vh;
+  background-image: url("/fondo-conductores.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
-.registrar-bg{
-  min-height:100vh;
-  background-image:url("/La-ermita.jpg");
-  background-size:cover;
-  background-position:center;
+.registrar-bg {
+  min-height: 100vh;
+  background-image: url("/La-ermita.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
-.Torre-de-Cali{
-  width:300px;
-  height:auto;
+.Torre-de-Cali {
+  width: 300px;
+  height: auto;
 }

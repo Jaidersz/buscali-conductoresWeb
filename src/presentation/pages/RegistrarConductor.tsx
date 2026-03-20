@@ -55,17 +55,16 @@ export default function RegistrarConductor() {
       }
     } else {
       // Construcción del body: incluye opcionales solo si tienen valor
-      const body: Conductor = {
-        cedula: form.cedula,
-        nombre: form.nombre,
-        correo_electronico: form.correo_electronico,
-        telefono: form.telefono,
-      };
+        body.cedula= form.cedula;
+        body.nombre= form.nombre;
+        body.correo_electronico= form.correo_electronico;
+        body.telefono= form.telefono;
+      
 
-      if (form.contrasena) body.contrasena = form.contrasena;
-      if (form.estado) body.estado = form.estado;
+        if (form.contrasena) body.contrasena = form.contrasena;
+        if (form.estado) body.estado = form.estado;
     }
-
+console.log(body)
     try {
       const API_URL = import.meta.env.VITE_API_URL;
       console.log(conductorToEdit!.cedula);
@@ -103,6 +102,7 @@ export default function RegistrarConductor() {
         }
       } else {
         alert('Error inesperado');
+        console.log(body)
       }
     }
   };

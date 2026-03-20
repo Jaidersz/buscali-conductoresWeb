@@ -89,23 +89,27 @@ export default function GestionConductores() {
     <div className='drivers-page'>
       <div className='drivers-card'>
         <div className='drivers-header' style={{ padding: '20px' }}>
+
+          <button onClick={() => navigate('/')}>Volver</button>
           <h1>Conductores</h1>
 
-          <button onClick={() => navigate('/')}>← Volver al Inicio</button>
-
           <button onClick={() => navigate('/conductores/registrar')}>
-            Registrar Conductor
+            Nuevo Conductor
           </button>
         </div>
+        <div className='options'>
         <input
           className='search'
           type='text'
-          placeholder='Buscar conductor'
+          placeholder='🔎 cedula/correo/telefono'
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
         />
+        {/* hacer una validacion antes de eliminar
+         (estas seguro que deseas eliminar a {}) */}
         <button
           onClick={handleDelete}
+          className='btn-delete'
           style={{ marginLeft: '10px' }}
         >
           Eliminar Conductor
@@ -113,10 +117,11 @@ export default function GestionConductores() {
 
         <button
           onClick={handleEdit}
-          style={{ marginLeft: '10px' }}
         >
           Editar Conductor
         </button>
+        </div>
+        
 
         <table>
           <thead>
