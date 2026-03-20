@@ -67,15 +67,15 @@ export default function GestionConductores() {
 
   };
 
-  // const handleEdit =  () => {
-  //   if (selectedCedula === null) {
-  //     alert("Seleccione un conductor");
-  //     return;
-  //   }
+  const handleEdit =  () => {
+    if (selectedCedula === null) {
+      alert("Seleccione un conductor");
+      return;
+    }
 
-  //   navigate("/conductores/registrar", { state: selectedCedula });
+    navigate("/conductores/registrar", { state: selectedCedula });
 
-  // };
+  };
 
   const conductoresFiltrados = conductores.filter(
     (conductor) =>
@@ -112,7 +112,7 @@ export default function GestionConductores() {
         </button>
 
         <button
-          // onClick={handleEdit}
+          onClick={handleEdit}
           style={{ marginLeft: '10px' }}
         >
           Editar Conductor

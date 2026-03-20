@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import type { Conductor } from '../../domain/entities/Conductor';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import type {ValidationError} from '../../domain/entities/Errors'
+//import type {ValidationError} from '../../domain/entities/Errors'
 
 export default function RegistrarConductor() {
   const location = useLocation();
   const conductorToEdit = location.state as Conductor | undefined;
+  const selectCedula = location.state as string | undefined;
 
   const navigate = useNavigate();
   //const repository = new ConductorMockRepository();
@@ -36,35 +37,60 @@ export default function RegistrarConductor() {
   };
 
   const handleSubmit = async () => {
-  
-    // Construcción del body: incluye opcionales solo si tienen valor
-    // de momento ignorar los errores de (any)
-    const body: Conductor = {
-      cedula: form.cedula,
-      nombre: form.nombre,
-      correo_electronico: form.correo_electronico,
-      telefono: form.telefono,
-    };
-  
-    if (form.contrasena) body.contrasena = form.contrasena;
-    if (form.estado) body.estado = form.estado;
+    const body: Partial<Conductor> = {};
 
+    if (conductorToEdit) {
+      // Construcción del body para editar: todo es opcional
+      if (form.nombre) {
+        body.nombre = form.nombre;
+      }
+      if (form.correo_electronico) {
+        body.correo_electronico = form.correo_electronico;
+      }
+      if (form.telefono) {
+        body.telefono = form.telefono;
+      }
+      if (form.estado) {
+        body.estado = form.estado;
+      }
+    } else {
+      // Construcción del body: incluye opcionales solo si tienen valor
+      const body: Conductor = {
+        cedula: form.cedula,
+        nombre: form.nombre,
+        correo_electronico: form.correo_electronico,
+        telefono: form.telefono,
+      };
 
+      if (form.contrasena) body.contrasena = form.contrasena;
+      if (form.estado) body.estado = form.estado;
+    }
 
     try {
       const API_URL = import.meta.env.VITE_API_URL;
+      console.log(conductorToEdit!.cedula);
+      if (conductorToEdit) {
+        const update = await axios.put(
+          `${API_URL}/conductores/${selectCedula}`,
+          body,
+        );
+        if (update.data) {
+          alert('Conductor Actualizado correctamente');
+          navigate('/conductores');
+        }
+      } else {
+        const register = await axios.post(`${API_URL}/conductores`, body);
 
-      const register = await axios.post(`${API_URL}/conductores`, body);
-      if (register.data) {
-        alert('Conductor registrado correctamente');
-        navigate('/conductores');
+        if (register.data) {
+          alert('Conductor registrado correctamente');
+          navigate('/conductores');
+        }
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         // Aquí recibes lo que tu backend mandó
         const status = error.response?.status;
-        const message = error.response?.data.error.map((err: ValidationError) =>`${err}`).join("\n") || "Error en la petición";
-    
+        const message = error.response?.data.error || 'Error en la petición';
 
         // const message = error.response?.data.error
         if (status === 400) {
@@ -76,7 +102,7 @@ export default function RegistrarConductor() {
           alert(message);
         }
       } else {
-        alert("Error inesperado");
+        alert('Error inesperado');
       }
     }
   };
@@ -89,7 +115,10 @@ export default function RegistrarConductor() {
         </div>
 
         <div className='register-right'>
-          <button onClick={() => navigate('/conductores')} style={{ marginLeft: '2px' }}>
+          <button
+            onClick={() => navigate('/conductores')}
+            style={{ marginLeft: '2px' }}
+          >
             ← Volver
           </button>
           <div style={{ padding: '15px' }}>
@@ -99,20 +128,25 @@ export default function RegistrarConductor() {
               {conductorToEdit ? 'Editar Conductor' : 'Registro Conductor'}
             </h1>
 
-            <strong>Cédula</strong>
-            <br />
-            <input
-              name='cedula'
-              placeholder='99999999'
-              value={form.cedula}
-              onChange={handleChange}
-            />
+            {!conductorToEdit && (
+              <>
+                
+                <strong>Cédula</strong>
+                
+                <input
+                  name='cedula'
+                  placeholder='99999999'
+                  value={form.cedula}
+                  onChange={handleChange}
+                />
+              </>
+            )}
 
-            <br />
+            
 
-            <br />
+            
             <strong>Nombre</strong>
-            <br />
+            
             <input
               name='nombre'
               placeholder='Sebastian Manrique'
@@ -120,11 +154,11 @@ export default function RegistrarConductor() {
               onChange={handleChange}
             />
 
-            <br />
+            
 
-            <br />
+            
             <strong>Correo Electronico</strong>
-            <br />
+            
             <input
               name='correo_electronico'
               placeholder='xjuanx69geymer@yaju.com'
@@ -133,7 +167,7 @@ export default function RegistrarConductor() {
             />
 
             <strong>Teléfono</strong>
-            <br />
+            
             <input
               name='telefono'
               placeholder='+573105106574 / 3105106574'
@@ -141,19 +175,21 @@ export default function RegistrarConductor() {
               onChange={handleChange}
             />
 
-            <br />
-            <strong>Contraseña</strong>
-            <br />
-            <input
-              name='contrasena'
-              placeholder='Abc@0123'
-              value={form.contrasena}
-              onChange={handleChange}
-            />
+            {!conductorToEdit && (
+              <>
+                
+                <strong>Contraseña</strong>
+                
+                <input
+                  name='contrasena'
+                  placeholder='Abc@0123'
+                  value={form.contrasena}
+                  onChange={handleChange}
+                />
+              </>
+            )}
 
-            <br />
             <strong>Estado</strong>
-            <br />
             <input
               name='estado'
               placeholder='Activo / Inactivo'
@@ -161,7 +197,9 @@ export default function RegistrarConductor() {
               onChange={handleChange}
             />
           </div>
-          <button onClick={handleSubmit}>Registrar</button>
+          <button onClick={handleSubmit}>
+            {conductorToEdit ? 'Actualizar' : 'Registrar'}
+          </button>
         </div>
       </div>
     </div>
