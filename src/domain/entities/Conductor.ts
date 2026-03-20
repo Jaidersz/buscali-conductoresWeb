@@ -15,7 +15,7 @@ export interface Conductor {
   nombre: string;
   correo_electronico: string;
   telefono: string;
-  contrasena: string;
-  estado: string;
+  contrasena?: string;
+  estado?: string;
 
 }

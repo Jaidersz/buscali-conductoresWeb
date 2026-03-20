@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import type { Conductor } from '../../domain/entities/Conductor';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import type {ValidationError} from '../../domain/entities/Errors'
 
 export default function RegistrarConductor() {
   const location = useLocation();
@@ -35,14 +36,21 @@ export default function RegistrarConductor() {
   };
 
   const handleSubmit = async () => {
-    const body = {
+  
+    // Construcción del body: incluye opcionales solo si tienen valor
+    // de momento ignorar los errores de (any)
+    const body: Conductor = {
       cedula: form.cedula,
       nombre: form.nombre,
       correo_electronico: form.correo_electronico,
       telefono: form.telefono,
-      contrasena: form.contrasena,
-      estado: form.estado,
     };
+  
+    if (form.contrasena) body.contrasena = form.contrasena;
+    if (form.estado) body.estado = form.estado;
+
+
+
     try {
       const API_URL = import.meta.env.VITE_API_URL;
 
@@ -55,12 +63,15 @@ export default function RegistrarConductor() {
       if (axios.isAxiosError(error)) {
         // Aquí recibes lo que tu backend mandó
         const status = error.response?.status;
-        const message = error.response?.data?.message || "Error en la petición";
+        const message = error.response?.data.error.map((err: ValidationError) =>`${err}`).join("\n") || "Error en la petición";
     
+
+        // const message = error.response?.data.error
         if (status === 400) {
-          alert(`Error de validación: ${message}`);
+          //estas alert's son las que le muestran al usuario los errores, cambiar el alert por un popup u otra cosa mas bonita
+          alert(`Error de validación:\n${message}`);
         } else if (status === 409) {
-          alert(`Datos duplicados: ${message}`);
+          alert(`Datos duplicados:\n${message}`);
         } else {
           alert(message);
         }
@@ -78,11 +89,13 @@ export default function RegistrarConductor() {
         </div>
 
         <div className='register-right'>
-          <button onClick={() => navigate('/')} style={{ marginLeft: '2px' }}>
-            ← Volver al Inicio
+          <button onClick={() => navigate('/conductores')} style={{ marginLeft: '2px' }}>
+            ← Volver
           </button>
           <div style={{ padding: '15px' }}>
             <h1>
+              {/* // el edit no funciona pues el flujo actual para editar solo cambia el titulo de lformunlario de registro, no se conecta con la pi ni hace la peticion put de manera adecuada, por lo que actualmente es el mismo formulario de post para crear y para editar
+              // REPITO: solo cambia el titulo, el formulario es el mismo y la peticion es la misma */}
               {conductorToEdit ? 'Editar Conductor' : 'Registro Conductor'}
             </h1>
 
@@ -90,7 +103,7 @@ export default function RegistrarConductor() {
             <br />
             <input
               name='cedula'
-              placeholder='Cédula'
+              placeholder='99999999'
               value={form.cedula}
               onChange={handleChange}
             />
@@ -102,7 +115,7 @@ export default function RegistrarConductor() {
             <br />
             <input
               name='nombre'
-              placeholder='Nombre'
+              placeholder='Sebastian Manrique'
               value={form.nombre}
               onChange={handleChange}
             />
@@ -114,7 +127,7 @@ export default function RegistrarConductor() {
             <br />
             <input
               name='correo_electronico'
-              placeholder='Correo Electronico'
+              placeholder='xjuanx69geymer@yaju.com'
               value={form.correo_electronico}
               onChange={handleChange}
             />
@@ -123,7 +136,7 @@ export default function RegistrarConductor() {
             <br />
             <input
               name='telefono'
-              placeholder='Telefono'
+              placeholder='+573105106574 / 3105106574'
               value={form.telefono}
               onChange={handleChange}
             />
@@ -133,7 +146,7 @@ export default function RegistrarConductor() {
             <br />
             <input
               name='contrasena'
-              placeholder='Contraseña'
+              placeholder='Abc@0123'
               value={form.contrasena}
               onChange={handleChange}
             />
@@ -143,7 +156,7 @@ export default function RegistrarConductor() {
             <br />
             <input
               name='estado'
-              placeholder='Estado'
+              placeholder='Activo / Inactivo'
               value={form.estado}
               onChange={handleChange}
             />
