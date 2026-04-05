@@ -106,15 +106,15 @@ export default function RegistrarConductor() {
         </div>
 
         <div className='register-right'>
-          <button
+          <button 
             onClick={() => navigate('/conductores')}
-            style={{ marginLeft: '2px' }}
+            className='btn-volver'
           >
             ← Volver
           </button>
           <div style={{ padding: '15px' }}>
             <h1>
-              {/* // el edit no funciona pues el flujo actual para editar solo cambia el titulo de lformunlario de registro, no se conecta con la pi ni hace la peticion put de manera adecuada, por lo que actualmente es el mismo formulario de post para crear y para editar
+              {/* // el edit no funciona pues el flujo actual para editar solo cambia el titulo del formulario de registro, no se conecta con la pi ni hace la peticion put de manera adecuada, por lo que actualmente es el mismo formulario de post para crear y para editar
               // REPITO: solo cambia el titulo, el formulario es el mismo y la peticion es la misma */}
               {conductorToEdit ? 'Editar Conductor' : 'Registro Conductor'}
             </h1>
@@ -188,7 +188,7 @@ export default function RegistrarConductor() {
               onChange={handleChange}
             />
           </div>
-          <button onClick={handleSubmit}>
+          <button onClick={handleSubmit} className='btn-registrar-editar'>
             {conductorToEdit ? 'Actualizar' : 'Registrar'}
           </button>
         </div>

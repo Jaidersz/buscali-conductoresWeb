@@ -30,13 +30,13 @@ a:hover {
   color: #00ff1a;
 }
 
-body {
+/*body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, #9b460ea8);
+  /*background: linear-gradient(135deg, #ce641e86);
   min-height: 100vh;
-}
-
+  }
+*/
 
 .drivers-page h1 {
   font-size: 3.2em;
@@ -58,11 +58,11 @@ button {
   transition: all 0.3s ease;
 }
 
-
+/* Color y caracteristica de al poner el cursor este cambia de color - este es GENERAL */
 button:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-  background-color: #DD0000;
+  background-color: #196411;
 }
 
 /* button:focus,
@@ -169,7 +169,9 @@ tr:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #9197e2, #6c62b6);
+  /*background: linear-gradient(135deg, #9197e2, #6c62b6);}*/
+  background-image: url("/Fondo-3Cali.png");
+  background-size: cover;
 }
 
 .register-container {
@@ -225,10 +227,31 @@ tr:hover {
 
 }
 
-.register-right button {
+/*.register-right button {
   width: 100%;
   padding: 12px;
   background: #00AA00;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+  */
+.btn-registrar-editar {
+ width: 90%;
+  padding: 12px;
+  background: #00AA00;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  align-items: left;
+}
+
+.btn-volver {
+ width: 30%;
+  padding: 12px;
+  background: #0a1daf;
   border: none;
   color: white;
   border-radius: 8px;
@@ -283,7 +306,9 @@ tr:hover {
 /* GESTION CONDUCTORES */
 .drivers-page {
   padding: 40px;
-  background: #00AA00;
+  /*background: #00AA00;*/
+  background-image: url(Fondo-3Cali.png);
+
   min-height: 100vh;
 }
 
@@ -387,4 +412,142 @@ p {
 .Torre-de-Cali {
   width: 300px;
   height: auto;
+}
+
+
+/*LOGIN*/
+/* Fondo general 
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1d2b64, #f8cdda);
+  height: 100vh;
+}*/
+
+/* Fondo con imagen */
+.background-blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: url("/Santiago de Cali.jpg") no-repeat center center/cover;
+
+  filter: blur(8px); /* 👈 AQUÍ está el efecto */
+  transform: scale(1.1); /* evita bordes raros al hacer blur */
+
+  z-index: -1;
+}
+
+/* Contenedor centrado */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* Card */
+.login-card {
+  background: #ffffff;
+  padding: 35px 30px;
+  border-radius: 20px;
+  width: 340px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+/* Inputs con icono */
+.input-group {
+  display: flex;
+  align-items: center;
+  background: #f2f2f2;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 15px;
+  transition: 0.3s;
+}
+
+/* Hover input */
+.input-group:hover {
+  background: #e6e6e6;
+}
+
+/* Icono */
+.icon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+/* Input */
+.input-group input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+}
+
+/* Error */
+.error {
+  color: #e74c3c;
+  font-size: 13px;
+  margin: 5px 0 10px;
+  text-align: center;
+}
+
+/* Opciones (checkbox + link) */
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.options label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.forgot {
+  color: #aa9d9d;
+  cursor: pointer;
+}
+
+.forgot:hover {
+  text-decoration: underline;
+}
+
+/* Botón */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #0000DD ;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Hover botón */
+.login-btn:hover {
+  background: #16204a;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
