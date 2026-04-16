@@ -266,9 +266,12 @@ tr:hover {
   background-position: center;
   display: flex;
   align-items: center;
+
+
 }
 
 .hero-overlay {
+  
   margin-left: 80px;
   background: rgba(0, 0, 0, 0.5);
   padding: 40px;
@@ -280,6 +283,43 @@ tr:hover {
   -1px  1px 0 black,
    1px  1px 0 black;
 }
+
+.admin-card {
+  background: rgba(15, 9, 9, 0.566);
+  padding: 40px;
+  border-radius: 20px;
+  width: 350px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.admin-card h1 {
+  margin-bottom: 10px;
+  color: #0f172a;
+}
+
+.admin-card p {
+  margin-bottom: 25px;
+  color: #cdc2c2;
+  border-color: #cf1c1c;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #16a34a;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: #15803d;
+}
+
 
 .hero-overlay h1 {
   font-size: 48px;
@@ -308,15 +348,28 @@ tr:hover {
   padding: 40px;
   /*background: #00AA00;*/
   background-image: url(Fondo-3Cali.png);
-
+  width: 100%;
+  overflow-x: auto; 
+  overflow-y: auto; 
   min-height: 100vh;
 }
 
 .drivers-card {
-  background: white;
+
+  
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative; /* 🔥 clave para posicionar el logo */
+
+
+
+  /*background: white;
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(21, 16, 16, 0.897);
+  box-shadow: 0 5px 20px rgba(21, 16, 16, 0.897);*/
 }
 
 .drivers-header {
@@ -333,6 +386,19 @@ tr:hover {
 
 }
 
+.logo-container {
+  position: absolute;
+  top: 65px;
+  left: 10px;
+}
+
+.logo-img {
+  width:90px;        /* tamaño mediano */
+  height: 90px;
+  border-radius: 50%; /* 🔥 circular */
+  object-fit: cover;  /* evita deformación */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
 
 .search {
   width: 33%;
@@ -347,11 +413,23 @@ tr:hover {
   justify-content: space-evenly;
 }
 
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
 table {
+  width: 100%;
+  min-width: 800px; /* evita que se encoja demasiado */
+  border-collapse: collapse;
+}
+
+/*table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-}
+}*/
 
 th {
   text-align: left;
@@ -360,15 +438,19 @@ th {
   font-weight: bold;
 }
 
+.selected-row {
+  background-color: #00AA00 ;
+  /*color: white;*/
+}
 
 tr:hover {
-  background: #0000DD;
+  background-color: #0000DD;
   cursor: pointer;
-  color: white;
+  
 }
 
 
-/* hacer q tr se quede cambiadoo el color para q el usuario sepa q selecciono */
+
 
 th,
 td {
@@ -416,13 +498,7 @@ p {
 
 
 /*LOGIN*/
-/* Fondo general 
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #1d2b64, #f8cdda);
-  height: 100vh;
-}*/
+
 
 /* Fondo con imagen */
 .background-blur {
@@ -550,4 +626,20 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Imagen circular en el login */
+.login-logo {
+  width: 100px;
+  /* Ancho de 100px para tamaño mediano */
+  height: 100px;
+  /* Alto de 100px para mantener proporción */
+  border-radius: 50%;
+  /* Hace la imagen circular */
+  object-fit: cover;
+  /* Cubre el espacio sin distorsionar la imagen */
+  margin: 0 auto 20px;
+  /* Centra la imagen y agrega espacio inferior */
+  display: block;
+  /* Hace que margin auto funcione correctamente */
 }
