@@ -16,7 +16,7 @@ const ForgotPassword = () => {
       return;
     }
 
-    alert("Se enviaron instrucciones al número de teléfono");
+    alert("Se enviaron instrucciones al correo asociado a tu número de teléfono");
   };
 
   return (
@@ -26,11 +26,11 @@ const ForgotPassword = () => {
         <img src="./public/logo Buscali.jpg.jpg" alt="Logo BusCali" className="logo-top" />
 
         <h1>Recuperar Contraseña</h1>
-        <p>Ingresa tu número de teléfono para continuar</p>
+        <p>Ingresa tu dirección de correo para continuar</p>
 
         <input
-          type="tel"
-          placeholder=" 3001234567"
+          type="email"
+          placeholder=" tu correo electrónico"
           value={telefono}
           onChange={(e) => setTelefono(e.target.value)}
         />

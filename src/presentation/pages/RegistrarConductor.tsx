@@ -116,7 +116,7 @@ export default function RegistrarConductor() {
             <h1>
               {/* // el edit no funciona pues el flujo actual para editar solo cambia el titulo del formulario de registro, no se conecta con la pi ni hace la peticion put de manera adecuada, por lo que actualmente es el mismo formulario de post para crear y para editar
               // REPITO: solo cambia el titulo, el formulario es el mismo y la peticion es la misma */}
-              {conductorToEdit ? 'Editar Conductor' : 'Registro Conductor'}
+              {conductorToEdit ? 'Editar Conductor' : 'Registro'}
             </h1>
 
             {!conductorToEdit && (
