@@ -1,26 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 // Importa hooks de React: useEffect para efectos secundarios, useState para estado
 import { useNavigate } from "react-router-dom";
 // Importa useNavigate para navegación
-// import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
-// Import comentado: repositorio mock para conductores
+import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
+// TEMPORAL: Import repositorio mock (remover cuando backend esté disponible)
+import { GetConductores } from "../../application/useCases/GetConductores";
+import { DeleteConductor } from "../../application/useCases/DeleteConductor";
 import axios from "axios";
+// import axios from "axios";
 // Importa axios para hacer peticiones HTTP
 import type { Conductor } from "../../domain/entities/Conductor";
 // Importa el tipo Conductor
 
-const API_URL = import.meta.env.VITE_API_URL; //"http://localhost:8080";
-// API_URL: obtiene la URL de la API desde variables de entorno, con fallback comentado
+// const API_URL = import.meta.env.VITE_API_URL;
+// COMENTADO TEMPORALMENTE
 
 export default function GestionConductores() {
   // Define el componente GestionConductores como función exportada por defecto
   const navigate = useNavigate();
   // navigate: función para cambiar de ruta
-  //const repository = new ConductorMockRepository();
-  // repository comentado: instancia del repositorio mock
-
-  // const repository = useMemo(() => new ConductorMockRepository(), []);
-  // repository comentado: versión memoizada del repositorio
+  const repository = useMemo(() => new ConductorMockRepository(), []);
+  // TEMPORAL: instancia del repositorio mock\n
   const [conductores, setConductores] = useState<Conductor[]>([]);
   // conductores: estado que almacena el array de conductores, inicializado vacío
 
@@ -36,14 +36,12 @@ export default function GestionConductores() {
       // load: función asíncrona para cargar conductores
       try {
         // try: bloque para manejar errores
-        const response = await axios.get(`${API_URL}/conductores`);
-        // response: hace petición GET a la API para obtener conductores
-        console.log("Conductores cargados:", response.data.data);
+        // TEMPORAL: usando mock en lugar de axios
+        const data = await GetConductores(repository);
+        // data: obtiene datos del repositorio mock
+        console.log("Conductores cargados (MOCK):", data);
         // console.log: imprime en consola los datos cargados
-        //Arreglo error
-        console.log("API URL:", API_URL);
-        // console.log: imprime la URL de la API
-        setConductores(response.data.data); // aquí guardas el array
+        setConductores(data); // aquí guardas el array
         // setConductores: actualiza el estado con los datos de la respuesta
       } catch (error) {
         // catch: maneja errores de la petición
@@ -54,8 +52,8 @@ export default function GestionConductores() {
 
     load();
     // Llama a la función load
-  }, []);
-  // []: dependencia vacía, se ejecuta solo al montar
+  }, [repository]);
+  // Dependencia: repository, para recargar si cambia
 
   const handleDelete = async () => {
     // handleDelete: función asíncrona para eliminar conductor
@@ -76,50 +74,33 @@ export default function GestionConductores() {
 
     try {
       // try: bloque para manejar errores
-      const API_URL = import.meta.env.VITE_API_URL;
-      // API_URL: obtiene la URL de la API
-      const response = await axios.delete(
-        // response: hace petición DELETE
-        `${API_URL}/conductores/${selectedCedula}`,
-        // URL con la cédula del conductor
-      );
-      if (response) {
-        // Si hay respuesta
-        alert(`El coductor con cedula ${selectedCedula} ha sido eliminado`);
-        // alert: muestra mensaje de éxito
-      }
-      console.log(response);
-      // console.log: imprime la respuesta
+      // TEMPORAL: usando mock en lugar de axios
+      await DeleteConductor(repository, selectedCedula);
+      alert(`El conductor con cedula ${selectedCedula} ha sido eliminado`);
+      // Actualizar lista
+      const data = await GetConductores(repository);
+      setConductores(data);
+      setSelectedCedula(null);
     } catch (error) {
-      // catch: maneja errores
-      if (axios.isAxiosError(error)) {
-        // Verifica si es error de axios
-        // Aquí recibes lo que tu backend mandó
-        const status = error.response?.status;
-        // status: código de estado HTTP
-        const message = error.response?.data.error || "Error en la petición";
-        // message: mensaje de error del backend o genérico
-
-        // const message = error.response?.data.error
-        if (status === 400) {
-          // Si es error 400 (bad request)
-          //estas alert's son las que le muestran al usuario los errores, cambiar el alert por un popup u otra cosa mas bonita
-          alert(`Error de validación:\n${message}`);
-          // alert: muestra error de validación
-        } else {
-          // Otro error
-          alert(message);
-          // alert: muestra el mensaje de error
-        }
-      } else {
-        // Error no de axios
-        alert("Error inesperado");
-        // alert: mensaje genérico
-      }
+      console.error("Error eliminando conductor:", error);
+      alert("Error al eliminar el conductor");
     }
+  };
 
-    window.location.reload();
-    // Recarga la página para actualizar la lista
+  const handleLogout = async () => {
+    // handleLogout: función para cerrar sesión
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("isAuthenticated");
+    try {
+      const API_URL = import.meta.env.VITE_API_URL;
+      await axios.post(`${API_URL}/conductores/logout`);
+      // Petición para cerrar sesión
+    } catch (error) {
+      console.error("Error cerrando sesión:", error);
+      // No mostrar error al usuario, proceder a redirigir
+    }
+    navigate('/login');
+    // Redirigir al login
   };
 
   const handleEdit = () => {
@@ -132,8 +113,14 @@ export default function GestionConductores() {
       // return: sale de la función
     }
 
-    navigate("/conductores/registrar", { state: selectedCedula });
-    // navigate: va a la página de registro pasando la cédula como estado
+    const conductorToEdit = conductores.find(c => c.cedula === selectedCedula);
+    if (!conductorToEdit) {
+      alert("Conductor no encontrado");
+      return;
+    }
+
+    navigate("/conductores/registrar", { state: conductorToEdit });
+    // navigate: va a la página de registro pasando el conductor como estado
   };
 
   const conductoresFiltrados = conductores.filter(
@@ -163,8 +150,8 @@ export default function GestionConductores() {
         {/* Tarjeta que contiene todo el contenido */}
         <div className="drivers-header" style={{ padding: "20px" }}>
           {/* Encabezado con padding */}
-          <button onClick={() => navigate("/")}>Volver</button>
-          {/* Botón para volver a la página principal */}
+          <button onClick={handleLogout}>Cerrar sesión</button>
+          {/* Botón para cerrar sesión */}
           <h1>Conductores</h1>
           {/* Título de la página */}
 

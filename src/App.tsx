@@ -1,7 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Importa componentes de React Router para manejar el enrutamiento de la aplicación
-import HomeAdmin from "./presentation/pages/HomeAdmin";
-// Importa el componente de la página de inicio del administrador
 import GestionConductores from "./presentation/pages/GestionConductores";
 // Importa el componente para gestionar conductores
 import RegistrarConductor from "./presentation/pages/RegistrarConductor";
@@ -26,15 +24,13 @@ function App() {
         <Route path="/login" element={<Login />} />
         {/* Ruta /login que también muestra el componente Login */}
         
-        <Route element={AuthGuard()} />
-        {/* Ruta que usa AuthGuard como layout para proteger rutas anidadas */}
-
-        <Route path="/Home" element={<HomeAdmin />} />
-        {/* Ruta /Home que muestra el componente HomeAdmin */}
-        <Route path="/conductores" element={<GestionConductores />} />
-        {/* Ruta /conductores que muestra el componente GestionConductores */}
-        <Route path="/conductores/registrar" element={<RegistrarConductor />} />
-        {/* Ruta /conductores/registrar que muestra el componente RegistrarConductor */}
+        <Route element={<AuthGuard />}>
+          {/* Rutas protegidas que solo pueden verse si el usuario está autenticado */}
+          <Route path="/conductores" element={<GestionConductores />} />
+          {/* Ruta /conductores que muestra el componente GestionConductores */}
+          <Route path="/conductores/registrar" element={<RegistrarConductor />} />
+          {/* Ruta /conductores/registrar que muestra el componente RegistrarConductor */}
+        </Route>
         <Route path="/forgot-password" element={<ForgotPassword />} />
         {/* Ruta /forgot-password que muestra el componente ForgotPassword */}
         

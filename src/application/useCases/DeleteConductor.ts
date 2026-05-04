@@ -12,9 +12,9 @@ export const DeleteConductor = async (
   // Define la función DeleteConductor como asíncrona
   repository: ConductorRepository,
   // repository: instancia del repositorio que implementa ConductorRepository
-  id: number
-  // id: identificador numérico del conductor a eliminar
+  cedula: string
+  // cedula: identificador string del conductor a eliminar
 ) => {
-  await repository.delete(id);
+  await repository.delete(cedula);
   // Llama al método delete del repositorio y espera su resolución
 };

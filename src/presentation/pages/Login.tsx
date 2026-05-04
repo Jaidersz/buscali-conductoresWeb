@@ -61,9 +61,11 @@ export default function Login() {
       contrasena: password,
     });
 
-    // Si la petición es exitosa (el back-end devuelve 200), asume que la cookie está configurada
+    // Si la petición es exitosa (el back-end devuelve 200), guarda sesión y redirige
     if (response.status === 200) {
-      navigate("/Home"); // Redirige al home
+      const token = response.data?.token ?? "authenticated";
+      localStorage.setItem("authToken", token);
+      navigate("/conductores"); // Redirige al panel de administración de conductores
     } else {
       setError("Respuesta inválida del servidor");
     }
@@ -197,14 +199,6 @@ export default function Login() {
           </button>
           {/* type="submit" → activa el onSubmit del form, ejecutando handleLogin */}
 
-          <div style={{ textAlign: "center", marginTop: "15px" }}>
-            {/* Contenedor centrado para el botón de registro */}
-            <span className="forgot" onClick={() => navigate("/conductores/registrar")}>
-              
-              ¿Aún no tienes cuenta? Regístrate
-              
-            </span>
-          </div>
 
         </form>
       </div>

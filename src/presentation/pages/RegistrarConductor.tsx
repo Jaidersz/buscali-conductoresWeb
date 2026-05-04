@@ -1,35 +1,30 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
+import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
+// TEMPORAL: usando mock
+import { RegisterConductor } from "../../application/useCases/RegisterConductor";
+import { UpdateConductor } from "../../application/useCases/UpdateConductor";
 import type { Conductor } from '../../domain/entities/Conductor';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+// TEMPORAL: comentado axios para usar mock
 //import type {ValidationError} from '../../domain/entities/Errors'
 
 export default function RegistrarConductor() {
   const location = useLocation();
   const conductorToEdit = location.state as Conductor | undefined;
-  const selectCedula = location.state as string | undefined;
 
   const navigate = useNavigate();
-  //const repository = new ConductorMockRepository();
-
-  // const [form, setForm] = useState({
-  //   cedula: conductorToEdit!.cedula,
-  //   nombre: conductorToEdit!.nombre,
-  //   telefono: conductorToEdit!.telefono,
-  //   correo_electronico: conductorToEdit!.correo_electronico,
-  //   contrasena: conductorToEdit?.contrasena ?? '',
-  //   estado: conductorToEdit?.estado ?? '',
-  // });
+  const repository = new ConductorMockRepository();
+  // TEMPORAL: instancia del repositorio mock
 
   const [form, setForm] = useState({
-    cedula: '',
-    nombre: '',
-    telefono: '',
-    correo_electronico: '',
-    contrasena: '',
-    estado: '',
+    cedula: conductorToEdit?.cedula || '',
+    nombre: conductorToEdit?.nombre || '',
+    telefono: conductorToEdit?.telefono || '',
+    correo_electronico: conductorToEdit?.correo_electronico || '',
+    contrasena: conductorToEdit?.contrasena || '',
+    estado: conductorToEdit?.estado || '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,64 +32,38 @@ export default function RegistrarConductor() {
   };
 
   const handleSubmit = async () => {
-    const body: Partial<Conductor> = conductorToEdit
-    ? {
-        // --- Modo editar: todo opcional ---
-        ...(form.nombre && { nombre: form.nombre }),
-        ...(form.correo_electronico && { correo_electronico: form.correo_electronico }),
-        ...(form.telefono && { telefono: form.telefono }),
-        ...(form.estado && { estado: form.estado })
-      }
-    : {
-        // --- Modo registrar: obligatorios + opcionales ---
-        cedula: form.cedula,
-        nombre: form.nombre,
-        correo_electronico: form.correo_electronico,
-        telefono: form.telefono,
-        ...(form.contrasena && { contrasena: form.contrasena }),
-        ...(form.estado && { estado: form.estado }),
-      };
-
-
     try {
-      const API_URL = import.meta.env.VITE_API_URL;
+      // TEMPORAL: usando mock en lugar de axios
       if (conductorToEdit) {
-        const update = await axios.put(
-          `${API_URL}/conductores/${selectCedula}`,
-          body,
-        );
-        if (update.data) {
-          alert('Conductor Actualizado correctamente');
-          navigate('/conductores');
-        }
+        // Modo editar
+        const updatedConductor: Conductor = {
+          cedula: conductorToEdit.cedula,
+          nombre: form.nombre || conductorToEdit.nombre,
+          correo_electronico: form.correo_electronico || conductorToEdit.correo_electronico,
+          telefono: form.telefono || conductorToEdit.telefono,
+          estado: form.estado || conductorToEdit.estado,
+          contrasena: form.contrasena || conductorToEdit.contrasena,
+        };
+        await UpdateConductor(repository, updatedConductor);
+        alert('Conductor Actualizado correctamente');
+        navigate('/conductores');
       } else {
-        const register = await axios.post(`${API_URL}/conductores`, body);
-
-        if (register.data) {
-          alert('Conductor registrado correctamente');
-          navigate('/conductores');
-        }
+        // Modo registrar
+        const newConductor: Conductor = {
+          cedula: form.cedula,
+          nombre: form.nombre,
+          correo_electronico: form.correo_electronico,
+          telefono: form.telefono,
+          contrasena: form.contrasena,
+          estado: form.estado,
+        };
+        await RegisterConductor(repository, newConductor);
+        alert('Conductor registrado correctamente');
+        navigate('/conductores');
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        // Aquí recibes lo que tu backend mandó
-        const status = error.response?.status;
-        const message = error.response?.data.error.map((err:string) =>`- ${err}`).join('\n') || 'Error en la petición';
-        
-
-        // const message = error.response?.data.error
-        if (status === 400) {
-          //estas alert's son las que le muestran al usuario los errores, cambiar el alert por un popup u otra cosa mas bonita
-          alert(`Error de validación:\n${message}`);
-        } else if (status === 409) {
-          alert(`Datos duplicados:\n${message}`);
-        } else {
-          alert(message);
-        }
-      } else {
-        alert('Error inesperado');
-        
-      }
+      console.error("Error:", error);
+      alert("Error al procesar la solicitud");
     }
   };
 
@@ -126,7 +95,7 @@ export default function RegistrarConductor() {
                 
                 <input
                   name='cedula'
-                  placeholder='99999999'
+                  placeholder='1234567890'
                   value={form.cedula}
                   onChange={handleChange}
                 />
@@ -152,7 +121,7 @@ export default function RegistrarConductor() {
             
             <input
               name='correo_electronico'
-              placeholder='xjuanx69geymer@yaju.com'
+              placeholder='usuarioexample.@gmail.com'
               value={form.correo_electronico}
               onChange={handleChange}
             />

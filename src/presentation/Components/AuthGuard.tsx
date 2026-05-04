@@ -3,8 +3,9 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const AuthGuard = () => {
   // Define el componente AuthGuard como función
-  const isAuth = true; // 👈 aquí luego validas login real
-  // isAuth: variable que simula el estado de autenticación (true por ahora)
+  const token = localStorage.getItem("authToken");
+  const isAuth = Boolean(token);
+  // isAuth: valida si existe un token de sesión en localStorage
 
   return isAuth ? <Outlet /> : <Navigate to="/login" />;
   // Si está autenticado, renderiza Outlet (las rutas protegidas)
