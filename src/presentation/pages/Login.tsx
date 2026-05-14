@@ -53,32 +53,50 @@ export default function Login() {
   }
 
   try {
-    const API_URL = import.meta.env.VITE_API_URL;
-    
-    
-    const response = await axios.post(`${API_URL}/conductores/login`, { // Nota: usa ruta relativa si configuraste baseURL
-      telefono: telefono,
+    // baseURL = VITE_API_URL en axiosConfig; el API real está bajo /api/v1/conductores
+    const response = await axios.post("/api/v1/conductores/login", {
+      telefono,
       contrasena: password,
     });
 
     // Si la petición es exitosa (el back-end devuelve 200), guarda sesión y redirige
     if (response.status === 200) {
-      const token = response.data?.token ?? "authenticated";
-      localStorage.setItem("authToken", token);
-      navigate("/conductores"); // Redirige al panel de administración de conductores
+      const token =
+        (response.data as { data?: { token?: string } })?.data?.token ??
+        response.data?.token;
+      if (token) localStorage.setItem("authToken", token);
+      else localStorage.setItem("authToken", "cookie-session");
+      navigate("/conductores");
     } else {
       setError("Respuesta inválida del servidor");
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const status = error.response?.status;
-      const message = error.response?.data?.message || "Error en el login";
+      if (!error.response) {
+        setError(
+          "No hay respuesta del servidor. Comprueba que el backend esté en marcha y que VITE_API_URL en .env sea el mismo puerto (ej. http://localhost:3001). Reinicia \"npm run dev\" del front tras cambiar .env."
+        );
+        return;
+      }
+      const status = error.response.status;
+      const body = error.response.data as {
+        message?: string;
+        errors?: string[];
+      };
+      const detail =
+        (Array.isArray(body?.errors) && body.errors.join(" ")) ||
+        body?.message ||
+        "";
       if (status === 401) {
-        setError("Teléfono o contraseña incorrectos");
+        setError(detail || "Teléfono o contraseña incorrectos");
       } else if (status === 400) {
-        setError(`Error de validación: ${message}`);
+        setError(detail ? `Validación: ${detail}` : "Datos inválidos");
+      } else if (status === 404) {
+        setError(
+          "Ruta del API no encontrada (404). Revisa que VITE_API_URL apunte al backend correcto."
+        );
       } else {
-        setError(message);
+        setError(detail || `Error del servidor (${status})`);
       }
     } else {
       setError("Error inesperado. Inténtalo de nuevo.");

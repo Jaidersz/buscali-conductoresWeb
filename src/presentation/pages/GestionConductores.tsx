@@ -2,8 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 // Importa hooks de React: useEffect para efectos secundarios, useState para estado
 import { useNavigate } from "react-router-dom";
 // Importa useNavigate para navegación
-import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
-// TEMPORAL: Import repositorio mock (remover cuando backend esté disponible)
+import { ConductorApiRepository } from "../../infrastructure/ConductorApiRepository";
 import { GetConductores } from "../../application/useCases/GetConductores";
 import { DeleteConductor } from "../../application/useCases/DeleteConductor";
 import axios from "axios";
@@ -19,8 +18,7 @@ export default function GestionConductores() {
   // Define el componente GestionConductores como función exportada por defecto
   const navigate = useNavigate();
   // navigate: función para cambiar de ruta
-  const repository = useMemo(() => new ConductorMockRepository(), []);
-  // TEMPORAL: instancia del repositorio mock\n
+  const repository = useMemo(() => new ConductorApiRepository(), []);
   const [conductores, setConductores] = useState<Conductor[]>([]);
   // conductores: estado que almacena el array de conductores, inicializado vacío
 
@@ -35,12 +33,7 @@ export default function GestionConductores() {
     const load = async () => {
       // load: función asíncrona para cargar conductores
       try {
-        // try: bloque para manejar errores
-        // TEMPORAL: usando mock en lugar de axios
         const data = await GetConductores(repository);
-        // data: obtiene datos del repositorio mock
-        console.log("Conductores cargados (MOCK):", data);
-        // console.log: imprime en consola los datos cargados
         setConductores(data); // aquí guardas el array
         // setConductores: actualiza el estado con los datos de la respuesta
       } catch (error) {
@@ -73,8 +66,6 @@ export default function GestionConductores() {
     }
 
     try {
-      // try: bloque para manejar errores
-      // TEMPORAL: usando mock en lugar de axios
       await DeleteConductor(repository, selectedCedula);
       alert(`El conductor con cedula ${selectedCedula} ha sido eliminado`);
       // Actualizar lista
@@ -92,8 +83,7 @@ export default function GestionConductores() {
     localStorage.removeItem("authToken");
     localStorage.removeItem("isAuthenticated");
     try {
-      const API_URL = import.meta.env.VITE_API_URL;
-      await axios.post(`${API_URL}/conductores/logout`);
+      await axios.post("/api/v1/conductores/logout");
       // Petición para cerrar sesión
     } catch (error) {
       console.error("Error cerrando sesión:", error);

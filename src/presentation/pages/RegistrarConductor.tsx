@@ -1,22 +1,17 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ConductorMockRepository } from "../../infrastructure/ConductorMockRepository";
-// TEMPORAL: usando mock
+import { ConductorApiRepository } from "../../infrastructure/ConductorApiRepository";
 import { RegisterConductor } from "../../application/useCases/RegisterConductor";
 import { UpdateConductor } from "../../application/useCases/UpdateConductor";
 import type { Conductor } from '../../domain/entities/Conductor';
 import { useLocation } from 'react-router-dom';
-// import axios from 'axios';
-// TEMPORAL: comentado axios para usar mock
-//import type {ValidationError} from '../../domain/entities/Errors'
 
 export default function RegistrarConductor() {
   const location = useLocation();
   const conductorToEdit = location.state as Conductor | undefined;
 
   const navigate = useNavigate();
-  const repository = new ConductorMockRepository();
-  // TEMPORAL: instancia del repositorio mock
+  const repository = useMemo(() => new ConductorApiRepository(), []);
 
   const [form, setForm] = useState({
     cedula: conductorToEdit?.cedula || '',
@@ -24,8 +19,32 @@ export default function RegistrarConductor() {
     telefono: conductorToEdit?.telefono || '',
     correo_electronico: conductorToEdit?.correo_electronico || '',
     contrasena: conductorToEdit?.contrasena || '',
-    estado: conductorToEdit?.estado || '',
+    estado:
+      conductorToEdit?.estado === 'Inactivo' ? 'Inactivo' : 'Activo',
   });
+
+  useEffect(() => {
+    if (conductorToEdit) {
+      setForm({
+        cedula: conductorToEdit.cedula,
+        nombre: conductorToEdit.nombre || '',
+        telefono: conductorToEdit.telefono || '',
+        correo_electronico: conductorToEdit.correo_electronico || '',
+        contrasena: '',
+        estado:
+          conductorToEdit.estado === 'Inactivo' ? 'Inactivo' : 'Activo',
+      });
+    } else {
+      setForm({
+        cedula: '',
+        nombre: '',
+        telefono: '',
+        correo_electronico: '',
+        contrasena: '',
+        estado: 'Activo',
+      });
+    }
+  }, [conductorToEdit]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -33,16 +52,16 @@ export default function RegistrarConductor() {
 
   const handleSubmit = async () => {
     try {
-      // TEMPORAL: usando mock en lugar de axios
       if (conductorToEdit) {
-        // Modo editar
         const updatedConductor: Conductor = {
           cedula: conductorToEdit.cedula,
-          nombre: form.nombre || conductorToEdit.nombre,
-          correo_electronico: form.correo_electronico || conductorToEdit.correo_electronico,
-          telefono: form.telefono || conductorToEdit.telefono,
-          estado: form.estado || conductorToEdit.estado,
-          contrasena: form.contrasena || conductorToEdit.contrasena,
+          nombre: form.nombre.trim() || conductorToEdit.nombre,
+          correo_electronico:
+            form.correo_electronico.trim() || conductorToEdit.correo_electronico,
+          telefono:
+            form.telefono.replace(/\D/g, '') ||
+            conductorToEdit.telefono.replace(/\D/g, ''),
+          estado: form.estado === 'Inactivo' ? 'Inactivo' : 'Activo',
         };
         await UpdateConductor(repository, updatedConductor);
         alert('Conductor Actualizado correctamente');
@@ -50,12 +69,12 @@ export default function RegistrarConductor() {
       } else {
         // Modo registrar
         const newConductor: Conductor = {
-          cedula: form.cedula,
-          nombre: form.nombre,
-          correo_electronico: form.correo_electronico,
-          telefono: form.telefono,
+          cedula: form.cedula.replace(/\D/g, ''),
+          nombre: form.nombre.trim(),
+          correo_electronico: form.correo_electronico.trim(),
+          telefono: form.telefono.replace(/\D/g, ''),
           contrasena: form.contrasena,
-          estado: form.estado,
+          estado: form.estado === 'Inactivo' ? 'Inactivo' : 'Activo',
         };
         await RegisterConductor(repository, newConductor);
         alert('Conductor registrado correctamente');
@@ -63,7 +82,7 @@ export default function RegistrarConductor() {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Error al procesar la solicitud");
+      alert(error instanceof Error ? error.message : "Error al procesar la solicitud");
     }
   };
 
@@ -83,10 +102,14 @@ export default function RegistrarConductor() {
           </button>
           <div style={{ padding: '15px' }}>
             <h1>
-              {/* // el edit no funciona pues el flujo actual para editar solo cambia el titulo del formulario de registro, no se conecta con la pi ni hace la peticion put de manera adecuada, por lo que actualmente es el mismo formulario de post para crear y para editar
-              // REPITO: solo cambia el titulo, el formulario es el mismo y la peticion es la misma */}
               {conductorToEdit ? 'Editar Conductor' : 'Registro'}
             </h1>
+
+            {conductorToEdit && (
+              <p style={{ marginBottom: 12, fontSize: 14 }}>
+                <strong>Cédula:</strong> {conductorToEdit.cedula}
+              </p>
+            )}
 
             {!conductorToEdit && (
               <>
@@ -130,9 +153,14 @@ export default function RegistrarConductor() {
             
             <input
               name='telefono'
-              placeholder='+573105106574 / 3105106574'
+              placeholder='3105106574'
               value={form.telefono}
-              onChange={handleChange}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  telefono: e.target.value.replace(/\D/g, ''),
+                }))
+              }
             />
 
             {!conductorToEdit && (
@@ -150,12 +178,17 @@ export default function RegistrarConductor() {
             )}
 
             <strong>Estado</strong>
-            <input
+            <select
               name='estado'
-              placeholder='Activo / Inactivo'
               value={form.estado}
-              onChange={handleChange}
-            />
+              onChange={(e) =>
+                setForm((f) => ({ ...f, estado: e.target.value }))
+              }
+              style={{ width: '100%', padding: 8, marginTop: 4 }}
+            >
+              <option value='Activo'>Activo</option>
+              <option value='Inactivo'>Inactivo</option>
+            </select>
           </div>
           <button onClick={handleSubmit} className='btn-registrar-editar'>
             {conductorToEdit ? 'Actualizar' : 'Registrar'}
