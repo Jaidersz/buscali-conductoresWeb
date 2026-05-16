@@ -113,7 +113,7 @@ export default function Login() {
         <div className='login-card'>
           {/* Imagen circular en la parte superior */}
           <img
-            src='./public/Logo BusCali.jpg.jpg'
+            src='/Logo BusCali.jpg.jpg'
             // src: ruta de la imagen (reemplazarla con la ruta correcta)
 
             // alt: texto alternativo si la imagen no carga

@@ -218,7 +218,7 @@ tr:hover {
 
 /* INPUTS: cuadros donde se ingresa la información */
 .register-right input {
-  
+
   width: 100%;
   padding: 10px;
   margin-bottom: 0px;
@@ -238,7 +238,7 @@ tr:hover {
 }
   */
 .btn-registrar-editar {
- width: 90%;
+  width: 90%;
   padding: 12px;
   background: #00AA00;
   border: none;
@@ -249,7 +249,7 @@ tr:hover {
 }
 
 .btn-volver {
- width: 30%;
+  width: 30%;
   padding: 12px;
   background: #0a1daf;
   border: none;
@@ -271,17 +271,17 @@ tr:hover {
 }
 
 .hero-overlay {
-  
+
   margin-left: 80px;
   background: rgba(0, 0, 0, 0.5);
   padding: 40px;
   border-radius: 10px;
   color: #FFFFFF;
-  text-shadow: 
-  -1px -1px 0 black,
-   1px -1px 0 black,
-  -1px  1px 0 black,
-   1px  1px 0 black;
+  text-shadow:
+    -1px -1px 0 black,
+    1px -1px 0 black,
+    -1px 1px 0 black,
+    1px 1px 0 black;
 }
 
 .admin-card {
@@ -289,7 +289,7 @@ tr:hover {
   padding: 40px;
   border-radius: 20px;
   width: 350px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .admin-card h1 {
@@ -328,7 +328,7 @@ tr:hover {
 }
 
 .hero-overlay p {
-  
+
   margin: 16px 0;
   font-size: 20px;
 }
@@ -337,7 +337,7 @@ tr:hover {
   /* este boton es primario, entonces hereda muchas cualidades que aqui se redefinen igual de manera innecesaria */
   padding: 12px 25px;
   background: #00AA00;
-  
+
   /* border:none;
   border-radius:6px;
   cursor:pointer; */
@@ -347,22 +347,23 @@ tr:hover {
 .drivers-page {
   padding: 40px;
   /*background: #00AA00;*/
-  background-image: url(Fondo-3Cali.png);
+  background-image: url(/Fondo-3Cali.png);
   width: 100%;
-  overflow-x: auto; 
-  overflow-y: auto; 
+  overflow-x: auto;
+  overflow-y: auto;
   min-height: 100vh;
 }
 
 .drivers-card {
 
-  
+
   width: 90%;
   max-width: 1200px;
   margin: auto;
   padding: 20px;
   box-sizing: border-box;
-  position: relative; /* 🔥 clave para posicionar el logo */
+  position: relative;
+  /* 🔥 clave para posicionar el logo */
 
 
 
@@ -376,7 +377,7 @@ tr:hover {
   width: 80%;
   margin: 0 10%;
   display: flex;
-  justify-content:space-evenly;
+  justify-content: space-evenly;
   align-items: center;
   margin-bottom: 20px;
 }
@@ -393,18 +394,21 @@ tr:hover {
 }
 
 .logo-img {
-  width:90px;        /* tamaño mediano */
+  width: 90px;
+  /* tamaño mediano */
   height: 90px;
-  border-radius: 50%; /* 🔥 circular */
-  object-fit: cover;  /* evita deformación */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  border-radius: 50%;
+  /* 🔥 circular */
+  object-fit: cover;
+  /* evita deformación */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .search {
   width: 33%;
   padding: 8px;
   border: 1px solid #000;
-  
+
 }
 
 .options {
@@ -421,7 +425,8 @@ tr:hover {
 
 table {
   width: 100%;
-  min-width: 800px; /* evita que se encoja demasiado */
+  min-width: 800px;
+  /* evita que se encoja demasiado */
   border-collapse: collapse;
 }
 
@@ -439,14 +444,14 @@ th {
 }
 
 .selected-row {
-  background-color: #00aa0097 ;
+  background-color: #00aa0097;
   /*color: white;*/
 }
 
 tr:hover {
   background-color: #00aa0097;
   cursor: pointer;
-  
+
 }
 
 
@@ -510,8 +515,10 @@ p {
 
   background: url("/public/INICIO fONDO.png") no-repeat center center/cover;
 
-  filter: blur(8px); /* 👈 AQUÍ está el efecto */
-  transform: scale(1.1); /* evita bordes raros al hacer blur */
+  filter: blur(8px);
+  /* 👈 AQUÍ está el efecto */
+  transform: scale(1.1);
+  /* evita bordes raros al hacer blur */
 
   z-index: -1;
 }
@@ -604,7 +611,7 @@ p {
   padding: 12px;
   border: none;
   border-radius: 12px;
-  background: #0000DD ;
+  background: #0000DD;
   color: white;
   font-size: 15px;
   cursor: pointer;
@@ -622,6 +629,7 @@ p {
     opacity: 0;
     transform: translateY(25px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -648,7 +656,8 @@ p {
 /* Fondo igual que otras vistas */
 .forgot-page {
   height: 100vh;
-  background-image: url("./public/INICIO fONDO.png"); /* usa el mismo fondo */
+  background-image: url("/INICIO fONDO.png");
+  /* usa el mismo fondo */
   background-size: cover;
   background-position: center;
   display: flex;
@@ -663,17 +672,20 @@ p {
   border-radius: 20px;
   width: 350px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 /*LOGO*/
 .logo-top {
-  
-  width:90px;        /* tamaño mediano */
+
+  width: 90px;
+  /* tamaño mediano */
   height: 90px;
-  border-radius: 50%; /* 🔥 circular */
-  object-fit: cover;  /* evita deformación */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  border-radius: 50%;
+  /* 🔥 circular */
+  object-fit: cover;
+  /* evita deformación */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
 
   /*width: 80px;
@@ -682,7 +694,7 @@ p {
   margin-bottom: 15px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 */
-  }
+}
 
 /* Texto */
 .forgot-card h1 {

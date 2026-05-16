@@ -1,14 +1,14 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from 'react';
 // Importa hooks de React: useEffect para efectos secundarios, useState para estado
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 // Importa useNavigate para navegación
-import { ConductorApiRepository } from "../../infrastructure/ConductorApiRepository";
-import { GetConductores } from "../../application/useCases/GetConductores";
-import { DeleteConductor } from "../../application/useCases/DeleteConductor";
-import axios from "axios";
+import { ConductorApiRepository } from '../../infrastructure/ConductorApiRepository';
+import { GetConductores } from '../../application/useCases/GetConductores';
+import { DeleteConductor } from '../../application/useCases/DeleteConductor';
+import axios from 'axios';
 // import axios from "axios";
 // Importa axios para hacer peticiones HTTP
-import type { Conductor } from "../../domain/entities/Conductor";
+import type { Conductor } from '../../domain/entities/Conductor';
 // Importa el tipo Conductor
 
 // const API_URL = import.meta.env.VITE_API_URL;
@@ -25,7 +25,7 @@ export default function GestionConductores() {
   const [selectedCedula, setSelectedCedula] = useState<string | null>(null);
   // selectedCedula: estado para la cédula del conductor seleccionado, puede ser string o null
 
-  const [busqueda, setBusqueda] = useState("");
+  const [busqueda, setBusqueda] = useState('');
   // busqueda: estado para el texto de búsqueda, inicializado vacío
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function GestionConductores() {
         // setConductores: actualiza el estado con los datos de la respuesta
       } catch (error) {
         // catch: maneja errores de la petición
-        console.error("Error cargando conductores:", error);
+        console.error('Error cargando conductores:', error);
         // console.error: imprime el error en consola
       }
     };
@@ -52,12 +52,12 @@ export default function GestionConductores() {
     // handleDelete: función asíncrona para eliminar conductor
     if (selectedCedula === null) {
       // Verifica si no hay conductor seleccionado
-      alert("Seleccione un conductor para eliminar");
+      alert('Seleccione un conductor para eliminar');
       // alert: muestra mensaje al usuario
       return;
       // return: sale de la función
     }
-    const seguro = window.confirm("¿Estás seguro de eliminar este conductor?");
+    const seguro = window.confirm('¿Estás seguro de eliminar este conductor?');
     // seguro: confirma con el usuario si quiere eliminar
     if (!seguro) {
       // Si el usuario cancela
@@ -73,20 +73,20 @@ export default function GestionConductores() {
       setConductores(data);
       setSelectedCedula(null);
     } catch (error) {
-      console.error("Error eliminando conductor:", error);
-      alert("Error al eliminar el conductor");
+      console.error('Error eliminando conductor:', error);
+      alert('Error al eliminar el conductor');
     }
   };
 
   const handleLogout = async () => {
     // handleLogout: función para cerrar sesión
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('isAuthenticated');
     try {
-      await axios.post("/api/v1/conductores/logout");
+      await axios.post('/api/v1/conductores/logout');
       // Petición para cerrar sesión
     } catch (error) {
-      console.error("Error cerrando sesión:", error);
+      console.error('Error cerrando sesión:', error);
       // No mostrar error al usuario, proceder a redirigir
     }
     navigate('/login');
@@ -97,19 +97,21 @@ export default function GestionConductores() {
     // handleEdit: función para editar conductor
     if (selectedCedula === null) {
       // Verifica si hay conductor seleccionado
-      alert("Seleccione un conductor");
+      alert('Seleccione un conductor');
       // alert: mensaje si no hay selección
       return;
       // return: sale de la función
     }
 
-    const conductorToEdit = conductores.find(c => c.cedula === selectedCedula);
+    const conductorToEdit = conductores.find(
+      (c) => c.cedula === selectedCedula,
+    );
     if (!conductorToEdit) {
-      alert("Conductor no encontrado");
+      alert('Conductor no encontrado');
       return;
     }
 
-    navigate("/conductores/registrar", { state: conductorToEdit });
+    navigate('/conductores/registrar', { state: conductorToEdit });
     // navigate: va a la página de registro pasando el conductor como estado
   };
 
@@ -131,34 +133,34 @@ export default function GestionConductores() {
 
   return (
     // Retorna el JSX de la página
-    <div className="drivers-page">
+    <div className='drivers-page'>
       {/* Contenedor principal de la página de conductores */}
-      <div className="drivers-card">
-        <div className="logo-container">
-          <img src="./public/Logo BusCali.jpg.jpg" alt="Logo" className="logo-img" />
+      <div className='drivers-card'>
+        <div className='logo-container'>
+          <img src='/Logo BusCali.jpg.jpg' alt='Logo' className='logo-img' />
         </div>
         {/* Tarjeta que contiene todo el contenido */}
-        <div className="drivers-header" style={{ padding: "20px" }}>
+        <div className='drivers-header' style={{ padding: '20px' }}>
           {/* Encabezado con padding */}
           <button onClick={handleLogout}>Cerrar sesión</button>
           {/* Botón para cerrar sesión */}
           <h1>Conductores</h1>
           {/* Título de la página */}
 
-          <button onClick={() => navigate("/conductores/registrar")}>
+          <button onClick={() => navigate('/conductores/registrar')}>
             {/* Botón para ir a registrar nuevo conductor */}
             Nuevo Conductor
             {/* Texto del botón */}
           </button>
         </div>
-        <div className="options">
+        <div className='options'>
           {/* Contenedor de opciones */}
           <input
-            className="search"
+            className='search'
             // Input de búsqueda con clase CSS
-            type="text"
+            type='text'
             // Tipo texto
-            placeholder=" cedula/correo/telefono"
+            placeholder=' cedula/correo/telefono'
             // Placeholder con icono de lupa
             value={busqueda}
             // Valor ligado al estado busqueda
@@ -171,9 +173,9 @@ export default function GestionConductores() {
           <button
             onClick={handleDelete}
             // Botón que llama a handleDelete
-            className="btn-delete"
+            className='btn-delete'
             // Clase CSS para botón de eliminar
-            style={{ marginLeft: "10px" }}
+            style={{ marginLeft: '10px' }}
             // Estilo inline para margen izquierdo
           >
             Eliminar Conductor
@@ -184,7 +186,7 @@ export default function GestionConductores() {
           {/* Botón para editar conductor */}
         </div>
 
-        <div className="table container">
+        <div className='table container'>
           <table>
             {/* Tabla para mostrar conductores */}
             <thead>
@@ -210,7 +212,7 @@ export default function GestionConductores() {
                 // Renderizado condicional: si no hay conductores
                 <tr>
                   {/* Fila única */}
-                  <td colSpan={5} style={{ textAlign: "center" }}>
+                  <td colSpan={5} style={{ textAlign: 'center' }}>
                     {/* Celda que ocupa 5 columnas, centrada */}
                     No hay conductores registrados
                     {/* Mensaje cuando no hay datos */}
@@ -226,7 +228,7 @@ export default function GestionConductores() {
                     onClick={() => setSelectedCedula(conductor.cedula)}
                     // Al hacer clic, selecciona la cédula
                     className={
-                      selectedCedula === conductor.cedula ? "selected-row" : ""
+                      selectedCedula === conductor.cedula ? 'selected-row' : ''
                     }
                   >
                     <td>{conductor.cedula}</td>
